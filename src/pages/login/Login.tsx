@@ -9,7 +9,6 @@ export const Login = () => {
   const [senha, setSenha] = useState("")
   const [erro, setErro] = useState("")
   const navigate = useNavigate()
-  const goCreate_account = () => navigate("/Create_account")
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -33,7 +32,6 @@ export const Login = () => {
       // salvar token no localStorage
       localStorage.setItem("token", res.data.token)
 
-      alert("Login feito com sucesso!")
       console.log("Usuário logado:", res.data.user)
 
       navigate("/Home")
@@ -49,7 +47,7 @@ export const Login = () => {
     >
       <div className="flex flex-col justify-center items-center 
                       w-[28rem] p-10 rounded-2xl 
-                      bg-white/5 shadow-xl">
+                      bg-black/10 shadow-xl">
         
         <div className="rounded-full overflow-hidden w-[12rem] h-[12rem] mb-12">
           <img src={logo} alt="logo" className="w-full h-full object-cover" />
@@ -79,7 +77,7 @@ export const Login = () => {
             Login
           </button>
 
-          <a className="mt-4 text-white text-base hover:underline" onClick={goCreate_account}>
+          <a className="mt-4 text-white text-base hover:underline" href="/create-account">
             Criar conta
           </a>
         </form>

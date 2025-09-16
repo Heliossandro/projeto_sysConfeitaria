@@ -10,7 +10,6 @@ export const Create_Account = () => {
   const [senha, setSenha] = useState("")
   const [erro, setErro] = useState("")
   const navigate = useNavigate()
-  const goLogin = () => navigate("/Login") 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -57,7 +56,7 @@ export const Create_Account = () => {
       {/* Container vidro/água */}
       <div className="flex flex-col justify-center items-center 
                       w-[28rem] p-10 rounded-2xl 
-                      bg-white/5 shadow-xl">
+                      bg-black/10 shadow-xl">
 
         {/* Logo redonda */}
         <div className="rounded-full overflow-hidden w-[12rem] h-[12rem] mb-12">
@@ -97,7 +96,7 @@ export const Create_Account = () => {
             Criar conta
           </button>
 
-          <a className="mt-4 text-white text-base hover:underline" href="" onClick={goLogin}>
+          <a className="mt-4 text-white text-base hover:underline" href="/login">
             Já tem uma conta? Faça login
           </a>
         </form>
