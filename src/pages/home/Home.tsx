@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Header } from "../../components/header/Header";
+import { Footer } from "../../components/footer/Footer";
 
 export const Home = () => {
   const [menus, setMenus] = useState<any[]>([]);
@@ -30,22 +31,26 @@ export const Home = () => {
           </h1>
             <div className="flex flex-col gap-8 mt-10 w-full max-w-6xl px-4">
                 {menus.map((menu) => (
+                  <a href="">
                     <div
                         key={menu.id}
                         className="flex flex-col sm:flex-row justify-between items-center 
                             rounded-2xl overflow-hidden shadow-lg p-4 bg-[#e29db7] 
-                            gap-4">
+                            gap-4 hover:bg-[#db789e] duration-300 transform motion-safe:hover:scale-110">
                             <h2 className="text-xl text-white font-semibold text-center sm:text-left">
                                 {menu.name}
                             </h2>
-                            <button className="px-4 py-2 text-white rounded-lg  hover:text-[#c75c87] transition">
-                                Ver mais
-                            </button>
                     </div>
+                  </a>
                 ))}
             </div>
         </section>
       </div>
+      <div className="bg-[#ffcde0] mb-[8rem] p-[2rem] flex justify-center flex-col items-center">
+        <h1 className="text-[#ffff] text-4xl mt-10 font-bold ">Iformações</h1>
+
+      </div>
+      <Footer/>
     </div>
   );
 };
