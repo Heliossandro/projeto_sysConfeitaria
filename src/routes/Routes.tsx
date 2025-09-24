@@ -5,6 +5,7 @@ import {Create_Account} from "../pages/create_account/Create_account"
 import { Home } from "../pages/home/Home";
 import { Config } from "../pages/config/Config";
 import { Shop } from "../pages/shop/Shop"; 
+import { AddItem } from "../pages/addItem/AddItem";
 
 export const AppRoutes = () => {
   return (
@@ -15,6 +16,7 @@ export const AppRoutes = () => {
       <Route path="/home" element={<Home/>}/>
       <Route path="/config" element={<Config/>}/>
       <Route path="/shop" element={<Shop/>}/>
+      <Route path="/add-item" element={<AddItem/>}/>
     </Routes>
   );
 };

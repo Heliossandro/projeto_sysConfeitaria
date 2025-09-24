@@ -1,0 +1,10 @@
+/* Esconde o scroll mas mantém a rolagem funcional */
+::-webkit-scrollbar {
+  width: 0px; /* largura da barra no Chrome/Safari */
+  height: 0px; /* altura da barra no horizontal */
+}
+
+body {
+  -ms-overflow-style: none;  /* IE e Edge */
+  scrollbar-width: none;     /* Firefox */
+}
