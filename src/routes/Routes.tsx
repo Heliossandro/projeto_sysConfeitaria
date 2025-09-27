@@ -6,6 +6,8 @@ import { Home } from "../pages/home/Home";
 import { Config } from "../pages/config/Config";
 import { Shop } from "../pages/shop/Shop"; 
 import { AddItem } from "../pages/addItem/AddItem";
+import { Menu } from "../pages/menu/Menu";
+import { Client } from "../client/Client";
 
 export const AppRoutes = () => {
   return (
@@ -17,6 +19,8 @@ export const AppRoutes = () => {
       <Route path="/config" element={<Config/>}/>
       <Route path="/shop" element={<Shop/>}/>
       <Route path="/add-item" element={<AddItem/>}/>
+      <Route path="/menu" element={<Menu/>}/>
+      <Route path="/client" element={<Client/>}/>
     </Routes>
   );
 };

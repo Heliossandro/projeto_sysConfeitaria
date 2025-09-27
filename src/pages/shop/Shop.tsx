@@ -30,9 +30,15 @@ export const Shop = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fff5f8]">
-      <Header />
+      <Header/>
 
-      <main className="flex-1 container mx-auto px-6 pt-28 pb-12">
+      <main className="flex-1 container mx-auto px-6 my-28 pt-12 pb-12">
+         <div className="mb-10 flex flex-col">
+            <input
+            type="text"
+            placeholder="pesquisar produto..."
+            className="p-2 rounded-xl bg-gray-200 placeholder:text-[#00000049] w-full"/>
+          </div>
         <h1 className="text-4xl font-extrabold text-center text-[#e29db7] mb-12">
           Nossa Loja
         </h1>
@@ -48,14 +54,6 @@ export const Shop = () => {
                 key={product.id}
                 className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 flex flex-col"
               >
-                {/* {product.image && (
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-56 object-cover hover:scale-105 transition-transform duration-500"
-                  />
-                )} */}
-
                 <div className="p-5 flex flex-col flex-1">
                   <h2 className="text-xl font-semibold text-gray-800 mb-2">
                     {product.name}
@@ -70,8 +68,12 @@ export const Shop = () => {
                     })}
                   </p>
 
-                  <button className="mt-auto bg-[#e29db7] text-white py-2 rounded-xl shadow hover:bg-[#db789e] transition duration-300">
+                  <button className="mt-auto mb-[1rem] bg-[#e29db7] text-white py-2 rounded-xl shadow hover:bg-[#db789e] transition duration-300">
                     Comprar
+                  </button>
+                  
+                  <button className="mt-auto bg-[#26c267] text-white py-2 rounded-xl shadow hover:bg-[#1cd66a] transition duration-300">
+                    Adicionar no carrinho
                   </button>
                 </div>
               </div>
