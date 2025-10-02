@@ -7,7 +7,7 @@ import { Config } from "../pages/config/Config";
 import { Shop } from "../pages/shop/Shop"; 
 import { AddItem } from "../pages/addItem/AddItem";
 import { Menu } from "../pages/menu/Menu";
-import { Client } from "../client/Client";
+import { Client } from "../pages/client/Client";
 
 export const AppRoutes = () => {
   return (
