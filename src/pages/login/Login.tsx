@@ -24,20 +24,21 @@ export const Login = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/auth/login", {
-        email,
-        password: senha,
-      })
+    const res = await axios.post("http://localhost:5000/auth/login", {
+      email,
+      password: senha,
+    })
 
-      // salvar token no localStorage
-      localStorage.setItem("token", res.data.token)
+    // salvar token e userId no localStorage
+    localStorage.setItem("token", res.data.token)
+    localStorage.setItem("userId", res.data.user.id) // 👈 guarda o ID do usuário logado
 
-      console.log("Usuário logado:", res.data.user)
+    console.log("Usuário logado:", res.data.user)
 
-      navigate("/Home")
-    } catch (err: any) {
-      setErro(err.response?.data?.error || "Erro no login")
-    }
+    navigate("/Home")
+  } catch (err: any) {
+    setErro(err.response?.data?.error || "Erro no login")
+  }
   }
 
   return (

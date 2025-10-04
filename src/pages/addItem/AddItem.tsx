@@ -8,7 +8,7 @@ interface Item {
   price: number;
   description: string;
   menuId: number;
-  image?: string;
+  status: string;
 }
 
 export const AddItem = () => {
@@ -21,12 +21,14 @@ export const AddItem = () => {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [menuId, setMenuId] = useState("");
-  const [image, setImage] = useState("");
+  const [status, setStatus] = useState("Disponível"); // <-- já começa disponível
 
-  const [editingId, setEditingId] = useState<number | null>(null);
+  // Modal states
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [editingData, setEditingData] = useState<Partial<Item>>({});
 
-  // Buscar menus (para selecionar)
+  // Buscar menus
   useEffect(() => {
     fetch("http://localhost:5000/menus")
       .then((res) => res.json())
@@ -52,8 +54,12 @@ export const AddItem = () => {
   const handleCreateItem = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !price || !description || !menuId) {
+    if (!name || !price || !description || !menuId || !status) {
       return alert("Todos os campos são obrigatórios!");
+    }
+
+    if (Number(price) <= 0) {
+      return alert("O preço deve ser maior que zero!");
     }
 
     try {
@@ -65,7 +71,7 @@ export const AddItem = () => {
           price: Number(price),
           description,
           menuId: Number(menuId),
-          image,
+          status,
         }),
       });
 
@@ -77,25 +83,26 @@ export const AddItem = () => {
       setPrice("");
       setDescription("");
       setMenuId("");
-      setImage("");
+      setStatus("Disponível"); // volta a default
     } catch (err) {
       console.error("Erro ao criar item:", err);
     }
   };
 
   // Atualizar item
-  const handleUpdateItem = async (id: number) => {
+  const handleUpdateItem = async (id: number, data: Partial<Item>) => {
     try {
       const res = await fetch(`http://localhost:5000/items/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editingData),
+        body: JSON.stringify(data),
       });
 
       const updatedItem = await res.json();
       setItems(items.map((item) => (item.id === id ? updatedItem : item)));
-      setEditingId(null);
+      setIsModalOpen(false);
       setEditingData({});
+      setSelectedItem(null);
     } catch (err) {
       console.error("Erro ao atualizar item:", err);
     }
@@ -167,14 +174,15 @@ export const AddItem = () => {
               ))}
             </select>
 
-            <label className="text-[#e29db7]">Imagem (URL)</label>
-            <input
-              type="text"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
+            <label className="text-[#e29db7]">Estado</label>
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
               className="p-2 rounded bg-gray-200 w-full"
-              placeholder="Cole o link da imagem..."
-            />
+            >
+              <option value="Disponível">Disponível</option>
+              <option value="Indisponível">Indisponível</option>
+            </select>
 
             <button
               type="submit"
@@ -202,63 +210,31 @@ export const AddItem = () => {
                   key={item.id}
                   className="flex justify-between items-center p-4 bg-[#ffe4ed] rounded-xl shadow-md border border-[#e29db7]/30"
                 >
-                  {editingId === item.id ? (
-                    <input
-                      type="text"
-                      value={editingData.name || ""}
-                      onChange={(e) =>
-                        setEditingData({ ...editingData, name: e.target.value })
-                      }
-                      className="p-2 border rounded w-1/2"
-                    />
-                  ) : (
-                    <span className="text-lg font-medium text-gray-700">
-                      {item.name} -{" "}
-                      {item.price.toLocaleString("pt-AO", {
-                        style: "currency",
-                        currency: "AOA",
-                      })}
-                    </span>
-                  )}
+                  <span className="text-lg font-medium text-gray-700">
+                    {item.name} -{" "}
+                    {item.price.toLocaleString("pt-AO", {
+                      style: "currency",
+                      currency: "AOA",
+                    })}
+                  </span>
 
                   <div className="flex gap-3">
-                    {editingId === item.id ? (
-                      <>
-                        <button
-                          onClick={() => handleUpdateItem(item.id)}
-                          className="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600"
-                        >
-                          Salvar
-                        </button>
-                        <button
-                          onClick={() => {
-                            setEditingId(null);
-                            setEditingData({});
-                          }}
-                          className="bg-gray-400 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-500"
-                        >
-                          Cancelar
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          onClick={() => {
-                            setEditingId(item.id);
-                            setEditingData(item);
-                          }}
-                          className="bg-[#e29db7] text-white px-4 py-2 rounded-lg shadow hover:bg-[#db789e]"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          onClick={() => handleDeleteItem(item.id)}
-                          className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600"
-                        >
-                          Apagar
-                        </button>
-                      </>
-                    )}
+                    <button
+                      onClick={() => {
+                        setSelectedItem(item);
+                        setEditingData(item);
+                        setIsModalOpen(true);
+                      }}
+                      className="bg-[#e29db7] text-white px-4 py-2 rounded-lg shadow hover:bg-[#db789e]"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => handleDeleteItem(item.id)}
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600"
+                    >
+                      Apagar
+                    </button>
                   </div>
                 </li>
               ))}
@@ -267,6 +243,93 @@ export const AddItem = () => {
         </div>
       </section>
       <Footer />
+
+      {/* Modal */}
+      {isModalOpen && selectedItem && (
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-xl shadow-lg p-6 w-[500px]">
+            <h2 className="text-2xl font-bold text-[#e29db7] mb-4">
+              Editar Item
+            </h2>
+
+            <div className="flex flex-col gap-3">
+              <input
+                type="text"
+                value={editingData.name ?? ""}
+                onChange={(e) =>
+                  setEditingData({ ...editingData, name: e.target.value })
+                }
+                placeholder="Nome"
+                className="p-2 border rounded"
+              />
+              <input
+                type="number"
+                value={editingData.price ?? ""}
+                onChange={(e) =>
+                  setEditingData({
+                    ...editingData,
+                    price: Number(e.target.value),
+                  })
+                }
+                placeholder="Preço"
+                className="p-2 border rounded"
+              />
+              <textarea
+                value={editingData.description ?? ""}
+                onChange={(e) =>
+                  setEditingData({
+                    ...editingData,
+                    description: e.target.value,
+                  })
+                }
+                placeholder="Descrição"
+                className="p-2 border rounded"
+              />
+              <select
+                value={editingData.menuId ?? ""}
+                onChange={(e) =>
+                  setEditingData({
+                    ...editingData,
+                    menuId: Number(e.target.value),
+                  })
+                }
+                className="p-2 border rounded"
+              >
+                {menus.map((menu) => (
+                  <option key={menu.id} value={menu.id}>
+                    {menu.name}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={editingData.status ?? ""}
+                onChange={(e) =>
+                  setEditingData({ ...editingData, status: e.target.value })
+                }
+                className="p-2 border rounded"
+              >
+                <option value="Disponível">Disponível</option>
+                <option value="Indisponível">Indisponível</option>
+              </select>
+            </div>
+
+            <div className="flex justify-end gap-4 mt-6">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 rounded bg-gray-400 text-white hover:bg-gray-500"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => handleUpdateItem(selectedItem.id, editingData)}
+                className="px-4 py-2 rounded bg-[#e29db7] text-white hover:bg-[#db789e]"
+              >
+                Salvar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
