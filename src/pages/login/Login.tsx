@@ -23,7 +23,7 @@ export const Login = () => {
       return
     }
 
-    try {
+  try {
     const res = await axios.post("http://localhost:5000/auth/login", {
       email,
       password: senha,
@@ -31,7 +31,8 @@ export const Login = () => {
 
     // salvar token e userId no localStorage
     localStorage.setItem("token", res.data.token)
-    localStorage.setItem("userId", res.data.user.id) // 👈 guarda o ID do usuário logado
+    localStorage.setItem("userId", res.data.user.id)
+    localStorage.setItem("userName", res.data.user.name) // 👈 novo
 
     console.log("Usuário logado:", res.data.user)
 

@@ -9,6 +9,7 @@ export const Client = () => {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [number, setNumber] = useState("")
   const [search, setSearch] = useState("")
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editName, setEditName] = useState("");
@@ -30,7 +31,7 @@ export const Client = () => {
   const handleAddClient = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name.trim() || !email.trim() || !password.trim()) {
+    if (!name.trim() || !email.trim() || !password.trim() || !number.trim()) {
       alert("Preencha todos os campos!");
       return;
     }
@@ -45,7 +46,7 @@ export const Client = () => {
       return;
     }
 
-    const newClient = { name, email, password };
+    const newClient = { name, email, password, number };
 
     fetch("http://localhost:5000/users", {
       method: "POST",
@@ -58,6 +59,7 @@ export const Client = () => {
         setName("");
         setEmail("");
         setPassword("");
+        setNumber("")
       })
       .catch(err => console.error("Erro ao adicionar:", err));
   };
@@ -131,6 +133,15 @@ export const Client = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="p-2 rounded bg-gray-200"
                 placeholder="Digite o email..."
+              />
+
+              <label className="text-[#e29db7]">Numero</label>
+              <input
+                type="text"
+                value={number}
+                onChange={(e) => setNumber(e.target.value)}
+                className="p-2 rounded bg-gray-200"
+                placeholder="Digite o seu numero..."
               />
 
               <label className="text-[#e29db7]">Senha</label>

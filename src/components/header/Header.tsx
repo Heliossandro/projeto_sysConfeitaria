@@ -1,14 +1,20 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import logo from "../../assets/image/logo.png"
-import { useNavigate } from "react-router-dom";
-import { NavBar } from "../navbar/Navbar";
+import { NavBar } from "../navbar/Navbar"
 
 export const Header = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const [userName, setUserName] = useState<string | null>(null)
+
+  useEffect(() => {
+    const storedName = localStorage.getItem("userName")
+    if (storedName) setUserName(storedName)
+  }, [])
 
   const goHome = () => {
-    navigate("/home");
-  };
+    navigate("/home")
+  }
 
   return (
     <div className="text-white fixed top-0 left-0 w-full z-50 shadow-md">
@@ -21,8 +27,13 @@ export const Header = () => {
             onClick={goHome}
           />
         </div>
+
+        <div className="text-white font-semibold mr-6 text-lg">
+          {userName ? `Olá, ${userName}!` : ""}
+        </div>
+
         <NavBar />
       </div>
     </div>
-  );
-};
+  )
+}
